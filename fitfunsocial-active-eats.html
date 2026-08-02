@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fit Fun Social · Active Eats</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --navy: #14263A;
+    --navy-soft: #1d3a56;
+    --sky: #1B6CA8;
+    --orange: #F2762E;
+    --lightblue: #6FB3DC;
+    --bg: #ffffff;
+    --bg-alt: #f5f7f9;
+    --bg-page: #eef1f4;
+    --text: #16202b;
+    --text-mid: #4a5763;
+    --text-muted: #8a95a1;
+    --border: rgba(20,38,58,0.10);
+    --border-med: rgba(20,38,58,0.16);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow: 0 1px 3px rgba(20,38,58,0.06), 0 6px 20px rgba(20,38,58,0.05);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, sans-serif;
+    background: var(--bg-page);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .container { max-width: 1160px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .hero {
+    background: var(--navy);
+    background-image: radial-gradient(120% 140% at 100% 0%, var(--navy-soft) 0%, var(--navy) 55%);
+    color: #fff;
+  }
+  .hero-inner { padding: 26px 22px 26px; }
+
+  .wordmark {
+    font-size: 13px; font-weight: 800; letter-spacing: 0.22em;
+    color: #dce6ef; text-transform: uppercase; margin-bottom: 18px;
+  }
+  .wordmark .fun { color: var(--orange); }
+  .wordmark .dot { color: var(--lightblue); margin: 0 6px; }
+
+  .hero-eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--lightblue); margin-bottom: 4px;
+  }
+  .hero-title {
+    font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.02; margin-bottom: 10px;
+  }
+  .hero-title .accent { color: var(--orange); }
+  .hero-sub { font-size: 15.5px; color: #c4d2df; max-width: 600px; line-height: 1.55; }
+
+  /* Contribute CTA */
+  .contribute {
+    margin-top: 20px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+  }
+  .contribute-text { flex: 1 1 240px; min-width: 0; }
+  .contribute-text strong { display: block; font-size: 14.5px; color: #fff; margin-bottom: 2px; }
+  .contribute-text span { font-size: 13px; color: #b7c6d4; line-height: 1.45; }
+  .contribute-btn {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--orange); color: #fff;
+    font-size: 14px; font-weight: 700; text-decoration: none;
+    padding: 11px 18px; border-radius: var(--radius-md);
+    transition: opacity 0.14s;
+  }
+  .contribute-btn:hover { opacity: 0.9; }
+  .contribute-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+  /* ── Controls bar (sticky) ── */
+  .controls {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border-med);
+    box-shadow: 0 2px 10px rgba(20,38,58,0.04);
+  }
+  .controls-inner { padding: 12px 22px; }
+
+  .search-wrap {
+    display: flex; align-items: center; gap: 9px;
+    background: var(--bg-alt); border: 1px solid var(--border-med);
+    border-radius: var(--radius-md); padding: 10px 13px; margin-bottom: 11px;
+  }
+  .search-wrap svg { color: var(--text-muted); flex-shrink: 0; }
+  .search-wrap input {
+    border: none; background: none; font-size: 15px; color: var(--text);
+    flex: 1; outline: none; min-width: 0;
+  }
+  .search-wrap input::placeholder { color: var(--text-muted); }
+  .clear-btn {
+    background: none; border: none; color: var(--text-muted); cursor: pointer;
+    padding: 0; display: none; font-size: 17px; line-height: 1;
+  }
+  .clear-btn.visible { display: block; }
+
+  .pills { display: flex; gap: 7px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .pills::-webkit-scrollbar { display: none; }
+  .pill {
+    flex-shrink: 0; padding: 7px 15px; border-radius: 20px;
+    font-size: 13px; font-weight: 600;
+    background: var(--bg-alt); color: var(--text-mid);
+    border: 1px solid var(--border-med); cursor: pointer; white-space: nowrap;
+    transition: background 0.15s, color 0.15s, border-color 0.15s; user-select: none;
+  }
+  .pill:hover { border-color: var(--sky); color: var(--sky); }
+  .pill.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+  .pill.active:hover { color: #fff; }
+
+  /* ── Results meta ── */
+  .meta-row { padding: 16px 22px 4px; display: flex; align-items: baseline; justify-content: space-between; }
+  .meta-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-mid); }
+  .meta-count { font-size: 13px; color: var(--text-muted); }
+
+  /* ── Card grid ── */
+  .grid { display: grid; grid-template-columns: 1fr; gap: 14px; padding: 14px 22px 30px; }
+  @media (min-width: 720px)  { .grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
+  @media (min-width: 1040px) { .grid { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
+
+  .card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow);
+    cursor: pointer; overflow: hidden; display: flex; flex-direction: column;
+    transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(20,38,58,0.08), 0 14px 34px rgba(20,38,58,0.10);
+    border-color: var(--border-med);
+  }
+  .card:focus-visible { outline: 2px solid var(--sky); outline-offset: 2px; }
+
+  .card-top { display: flex; gap: 13px; padding: 15px 15px 12px; align-items: center; }
+  .emoji-tile {
+    width: 60px; height: 60px; border-radius: 14px;
+    background: linear-gradient(150deg, #fff2e9, #ffe1cd);
+    border: 1px solid #f4d4bf;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 30px; line-height: 1;
+  }
+  .card-head { min-width: 0; flex: 1; }
+  .card-name { font-size: 16.5px; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 3px; }
+  .card-by { font-size: 12.5px; font-weight: 600; color: var(--sky); }
+  .card-bio {
+    font-size: 13.5px; color: var(--text-mid); line-height: 1.5; padding: 0 15px 12px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .card-foot {
+    margin-top: auto; display: flex; align-items: center; gap: 6px;
+    padding: 11px 15px; border-top: 1px solid var(--border); background: var(--bg-alt);
+  }
+  .card-cat { font-size: 12px; font-weight: 600; color: var(--text-mid); text-transform: capitalize; }
+  .card-view { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--orange); flex-shrink: 0; }
+
+  /* ── Empty state ── */
+  .empty { display: none; text-align: center; padding: 60px 24px; color: var(--text-muted); }
+  .empty.show { display: block; }
+  .empty-icon { font-size: 38px; margin-bottom: 12px; }
+  .empty h3 { font-size: 16px; font-weight: 700; color: var(--text-mid); margin-bottom: 6px; }
+  .empty p { font-size: 14px; }
+
+  /* ── Modal ── */
+  .overlay {
+    display: none; position: fixed; inset: 0; z-index: 100;
+    background: rgba(20,38,58,0.55); align-items: flex-end; justify-content: center;
+  }
+  .overlay.open { display: flex; }
+  @media (min-width: 720px) { .overlay.open { align-items: center; } }
+
+  .sheet {
+    background: var(--bg); border-radius: 22px 22px 0 0;
+    width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto;
+    -webkit-overflow-scrolling: touch; animation: slideUp 0.22s ease-out;
+  }
+  @media (min-width: 720px) { .sheet { border-radius: var(--radius-lg); max-height: 88vh; animation: popIn 0.18s ease-out; } }
+  @keyframes slideUp { from { transform: translateY(28px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes popIn  { from { transform: scale(0.97); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .sheet { animation: none; } .card { transition: none; } }
+
+  .sheet-handle { width: 38px; height: 4px; background: var(--border-med); border-radius: 2px; margin: 11px auto 0; }
+  @media (min-width: 720px) { .sheet-handle { display: none; } }
+
+  .sheet-hero { display: flex; gap: 15px; align-items: center; padding: 20px 22px 14px; }
+  .sheet-emoji {
+    width: 78px; height: 78px; border-radius: 18px;
+    background: linear-gradient(150deg, #fff2e9, #ffe1cd); border: 1px solid #f4d4bf;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 42px;
+  }
+  .sheet-name { font-size: 21px; font-weight: 800; color: var(--text); line-height: 1.15; margin-bottom: 3px; }
+  .sheet-by { font-size: 13.5px; font-weight: 600; color: var(--sky); }
+
+  .sheet-body { padding: 0 22px 24px; }
+  .sheet-blurb { font-size: 15px; color: var(--text-mid); line-height: 1.6; font-style: italic; padding: 6px 0 4px; }
+
+  .recipe-cat-tag {
+    display: inline-block; margin: 8px 0 4px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--orange); background: #fff2e9; border: 1px solid #f4d4bf;
+    padding: 4px 11px; border-radius: 20px;
+  }
+
+  .rsec { margin-top: 18px; }
+  .rsec-label {
+    font-size: 11px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--navy); margin-bottom: 9px; padding-bottom: 7px; border-bottom: 2px solid var(--border);
+  }
+  .ing-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .ing-list li {
+    position: relative; padding-left: 20px; font-size: 14.5px; color: var(--text); line-height: 1.5;
+  }
+  .ing-list li::before {
+    content: ''; position: absolute; left: 4px; top: 8px;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--orange);
+  }
+  .rsec p { font-size: 14.5px; color: var(--text-mid); line-height: 1.68; }
+
+  .actions { display: flex; gap: 9px; margin-top: 22px; }
+  .btn {
+    flex: 1 1 auto; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 14px; border-radius: var(--radius-md);
+    font-size: 14.5px; font-weight: 700; text-decoration: none; cursor: pointer;
+    border: 1px solid var(--border-med); background: var(--bg-alt); color: var(--navy);
+    transition: background 0.14s;
+  }
+  .btn:hover { background: #e6ecf1; }
+  .btn:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+
+  .close-row { text-align: center; padding: 16px 0 4px; }
+  .close-btn { background: none; border: none; font-size: 13.5px; color: var(--text-muted); cursor: pointer; padding: 8px 24px; }
+  .close-btn:hover { color: var(--text); }
+
+  /* ── Footer ── */
+  .footer { text-align: center; padding: 24px 22px 40px; color: var(--text-muted); font-size: 12.5px; }
+  .footer .wm { font-weight: 800; letter-spacing: 0.14em; color: var(--text-mid); }
+  .footer .wm .fun { color: var(--orange); }
+
+  .disclaimer {
+    max-width: 780px; margin: 0 auto;
+    padding: 18px 22px 46px;
+    font-size: 11.5px; color: var(--text-muted); line-height: 1.65; text-align: center;
+    border-top: 1px solid var(--border);
+  }
+  .disclaimer strong { color: var(--text-mid); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="wordmark">FIT<span class="dot">·</span><span class="fun">FUN</span><span class="dot">·</span>SOCIAL</div>
+      <div class="hero-eyebrow">Community Recipes</div>
+      <h1 class="hero-title">Active Eats<span class="accent">.</span></h1>
+      <p class="hero-sub">Real recipes from the Fit Fun Social community — high-protein breakfasts, no-fuss lunches, dinners you'll actually make, snacks that don't undo the work, and a few the kids will eat without a fight. Shared by members, for members.</p>
+
+      <div class="contribute">
+        <div class="contribute-text">
+          <strong>Got a recipe worth sharing?</strong>
+          <span>Send it in and we'll add it to the board — no food-photography skills required.</span>
+        </div>
+        <a class="contribute-btn" href="mailto:recipes@fitfunsocial.com?subject=Active%20Eats%20Recipe%20Submission">✉️ Contribute a Recipe</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="container">
+    <div class="controls-inner">
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search" placeholder="Search recipes, ingredients, or contributors…" autocomplete="off" autocorrect="off" spellcheck="false">
+        <button class="clear-btn" id="clear-btn" aria-label="Clear search">✕</button>
+      </div>
+      <div class="pills" id="pills">
+        <div class="pill active" data-cat="All">All</div>
+        <div class="pill" data-cat="Breakfast">🥞 Breakfast</div>
+        <div class="pill" data-cat="Lunch">🥗 Lunch</div>
+        <div class="pill" data-cat="Dinner">🐟 Dinner</div>
+        <div class="pill" data-cat="Dinner for One">🍤 Dinner for One</div>
+        <div class="pill" data-cat="Meal Prep">🍱 Meal Prep</div>
+        <div class="pill" data-cat="Post-Workout">🍠 Post-Workout</div>
+        <div class="pill" data-cat="Snacks">🥜 Snacks</div>
+        <div class="pill" data-cat="Smoothies">🥤 Smoothies</div>
+        <div class="pill" data-cat="Kids">🧁 Kids</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="meta-row">
+    <div class="meta-title">Community Recipes</div>
+    <div class="meta-count" id="count"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty">
+    <div class="empty-icon">🔍</div>
+    <h3>No recipes found</h3>
+    <p>Try a different search or category.</p>
+  </div>
+  <div class="footer">
+    <div class="wm">FIT <span class="fun">FUN</span> SOCIAL</div>
+    <div style="margin-top:6px">Active Eats · Community Recipes</div>
+  </div>
+  <div class="disclaimer">
+    <strong>Community-submitted content.</strong> Recipes on Active Eats are shared by members of the community as-is. They have not been tested, reviewed, verified, or endorsed by Fit Fun Social or Six Five Apps LLC, and no nutritional, health, or dietary claim on this page has been evaluated by either. Ingredient lists may be incomplete or inaccurate — you are responsible for checking for allergens and for any dietary or medical restrictions that apply to you. Nothing here is medical or nutritional advice; consult a qualified professional before making changes to your diet. Prepare and consume any recipe at your own risk.
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true">
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-hero">
+      <div class="sheet-emoji" id="m-emoji"></div>
+      <div style="min-width:0">
+        <div class="sheet-name" id="m-name"></div>
+        <div class="sheet-by" id="m-by"></div>
+      </div>
+    </div>
+    <div class="sheet-body">
+      <span class="recipe-cat-tag" id="m-cat"></span>
+      <div class="sheet-blurb" id="m-blurb"></div>
+
+      <div class="rsec">
+        <div class="rsec-label">Ingredients</div>
+        <ul class="ing-list" id="m-ingredients"></ul>
+      </div>
+      <div class="rsec">
+        <div class="rsec-label">Prep</div>
+        <p id="m-prep"></p>
+      </div>
+      <div class="rsec">
+        <div class="rsec-label">Cooking</div>
+        <p id="m-cooking"></p>
+      </div>
+
+      <div class="actions" id="m-actions"></div>
+
+      <div class="close-row">
+        <button class="close-btn" id="close-btn">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ACTIVE EATS — community recipes
+   No food photos: each dish shows an emoji.
+   ============================================================ */
+var recipes = [
+  {
+    emoji:'🥞', cat:'Breakfast',
+    name:'Cottage Cheese Protein Pancakes',
+    by:'Terrence Okafor',
+    blurb:'Thirty grams of protein hiding inside a stack of real pancakes. No powder, no chalky aftertaste, no protein-bar sadness.',
+    ingredients:[
+      '1 cup rolled oats',
+      '1 cup low-fat cottage cheese',
+      '4 egg whites (or 2 whole eggs)',
+      '1 tsp vanilla extract',
+      '1 tsp baking powder',
+      '½ tsp cinnamon',
+      'Pinch of salt',
+      'Cooking spray or ½ tsp coconut oil',
+      'Berries and a spoon of Greek yogurt to top'
+    ],
+    prep:'Add oats, cottage cheese, eggs, vanilla, baking powder, cinnamon, and salt to a blender. Blend 45 seconds until the batter is smooth and pourable — it should ribbon off the spoon, not clump. Let it rest 5 minutes so the oats hydrate and the batter thickens.',
+    cooking:'Heat a nonstick skillet over medium-low and lightly grease it. Pour ¼-cup rounds. Cook 2–3 minutes, until bubbles form across the surface and the edges look dry, then flip and cook 1–2 minutes more. Keep the heat lower than you think — these brown faster than regular pancakes. Makes about 8 pancakes, 2 servings.',
+    links:[{label:'📷 Instagram',url:'#'}]
+  },
+  {
+    emoji:'🥗', cat:'Lunch',
+    name:'Crispy Chickpea Power Bowl',
+    by:'Renata Alvarez',
+    blurb:'The lunch that doesn\'t put you to sleep by 2pm. Crispy roasted chickpeas, greens, and a lemon-tahini drizzle that makes vegetables feel like a decision you\'re proud of.',
+    ingredients:[
+      '1 can chickpeas, drained and patted dry',
+      '2 tbsp olive oil',
+      '1 tsp smoked paprika',
+      '½ tsp garlic powder',
+      '4 cups chopped greens (kale or romaine)',
+      '1 cup cooked quinoa',
+      '½ cucumber, diced',
+      '¼ cup tahini',
+      'Juice of 1 lemon',
+      'Salt and pepper'
+    ],
+    prep:'Heat oven to 425°F. Toss the dried chickpeas with olive oil, paprika, garlic powder, and a pinch of salt. Whisk the tahini with the lemon juice and 2–3 tbsp warm water until it pours smoothly — add water a splash at a time so it loosens without going watery.',
+    cooking:'Roast the chickpeas 25–30 minutes, shaking the pan halfway, until deep golden and crisp. Build the bowl with greens, quinoa, and cucumber, pile the warm chickpeas on top, and finish with the lemon-tahini drizzle. Serves 2.',
+    links:[{label:'📷 Instagram',url:'#'}]
+  },
+  {
+    emoji:'🐟', cat:'Dinner',
+    name:'Sheet-Pan Chili-Lime Salmon',
+    by:'Marcus Deng',
+    blurb:'Dinner on one pan in twenty minutes, because you trained today and you\'re not doing dishes for an hour. Flaky salmon, blistered veg, zero babysitting.',
+    ingredients:[
+      '2 salmon fillets (about 6 oz each)',
+      '2 cups broccoli florets',
+      '1 red bell pepper, sliced',
+      '2 tbsp olive oil',
+      '1 tbsp chili powder',
+      'Juice and zest of 1 lime',
+      '2 cloves garlic, minced',
+      'Salt and pepper'
+    ],
+    prep:'Heat oven to 400°F and line a sheet pan. Whisk the olive oil, chili powder, lime juice and zest, garlic, salt, and pepper. Toss the broccoli and pepper in half of it and spread on the pan; brush the rest over the salmon.',
+    cooking:'Roast the vegetables alone for 8 minutes, then push them to the edges, set the salmon in the center, and roast 10–12 minutes more until the salmon flakes with a fork. Squeeze extra lime over the top before serving. Serves 2.',
+    links:[{label:'📷 Instagram',url:'#'}]
+  },
+  {
+    emoji:'🍤', cat:'Dinner for One',
+    name:'Single-Serve Garlic Shrimp Rice Bowl',
+    by:'Jordan Wells',
+    blurb:'Dinner for one that isn\'t sad-desk-cereal. One pan, one bowl, no fridge full of leftovers you\'ll resent by Thursday.',
+    ingredients:[
+      '5 oz raw shrimp, peeled',
+      '¾ cup cooked rice (or a microwave pouch)',
+      '1 cup baby spinach',
+      '1 tbsp olive oil',
+      '2 cloves garlic, minced',
+      '½ tsp red pepper flakes',
+      'Juice of ½ lemon',
+      'Salt and pepper'
+    ],
+    prep:'Pat the shrimp dry and season with salt and pepper. Mince the garlic and get everything within reach — this moves fast once the pan is hot.',
+    cooking:'Heat the olive oil over medium-high, add the garlic and red pepper flakes for 30 seconds until fragrant, then the shrimp. Cook about 2 minutes a side until pink and opaque. Toss in the spinach to wilt, squeeze the lemon over, and pile it onto the warm rice. Serves 1.',
+    links:[{label:'📷 Instagram',url:'#'}]
+  },
+  {
+    emoji:'🍱', cat:'Meal Prep',
+    name:'Sunday Chicken & Rice Meal Prep',
+    by:'Kayla Brooks',
+    blurb:'Five containers, thirty minutes, one calm week. The boring-in-the-best-way prep that means you never hit 6pm with no plan and a vending machine.',
+    ingredients:[
+      '2 lbs chicken breast',
+      '2 cups uncooked rice',
+      '1 lb broccoli florets',
+      '3 tbsp olive oil, divided',
+      '2 tsp garlic powder',
+      '2 tsp paprika',
+      '1 tsp onion powder',
+      'Salt and pepper'
+    ],
+    prep:'Heat oven to 425°F. Start the rice per its package. Toss the chicken with 2 tbsp of the oil and all the spices; toss the broccoli with the remaining oil and a pinch of salt.',
+    cooking:'Roast the chicken 22–25 minutes until it reaches 165°F, adding the broccoli to the pan for the last 15. Let the chicken rest, then slice. Divide the chicken, rice, and broccoli across 5 containers and refrigerate up to 4 days. Makes 5 meals.',
+    links:[{label:'📷 Instagram',url:'#'}]
+  },
+  {
+    emoji:'🍠', cat:'Post-Workout',
+    name:'Post-Lift Sweet Potato Recovery Bowl',
+    by:'Andre Foster',
+    blurb:'Carbs and protein in the window that matters. Refuels the tank after a hard session without sitting like a brick while you\'re still catching your breath.',
+    ingredients:[
+      '1 medium sweet potato',
+      '2 eggs',
+      '½ cup black beans, rinsed',
+      '¼ avocado, sliced',
+      '2 tbsp salsa',
+      '1 tsp olive oil',
+      'Salt and pepper'
+    ],
+    prep:'Pierce the sweet potato a few times and microwave 5–6 minutes until tender (or bake a batch ahead). Warm the black beans while it cooks.',
+    cooking:'Fry or scramble the eggs in the olive oil to your liking. Split the sweet potato open, top with the beans, eggs, avocado, and salsa, and season. Eat within about an hour of training. Serves 1.',
+    links:[{label:'📷 Instagram',url:'#'}]
+  },
+  {
+    emoji:'🥜', cat:'Snacks',
+    name:'No-Bake Peanut Butter Protein Bites',
+    by:'Aisha Grant',
+    blurb:'The 3pm rescue that isn\'t a vending machine. Roll a batch Sunday, grab two when the crash hits, and skip the protein-bar tax entirely.',
+    ingredients:[
+      '1 cup rolled oats',
+      '½ cup natural peanut butter',
+      '⅓ cup honey',
+      '¼ cup mini dark chocolate chips',
+      '2 tbsp ground flaxseed',
+      '1 scoop vanilla protein powder (optional)',
+      '1 tsp vanilla extract',
+      'Pinch of salt'
+    ],
+    prep:'Stir everything together in one bowl until it holds when you press it. Too dry, add a spoon of peanut butter; too sticky, a spoon of oats. Chill the mixture 15 minutes so it firms up enough to roll.',
+    cooking:'No cooking required — roll into 12 balls and store in the fridge up to a week. They freeze well too, so make a double batch while you\'re at it. Makes 12.',
+    links:[{label:'📷 Instagram',url:'#'}]
+  },
+  {
+    emoji:'🥤', cat:'Smoothies',
+    name:'Green Recovery Smoothie',
+    by:'Devin Park',
+    blurb:'Tastes like a treat, works like recovery. Spinach you won\'t taste, banana for the legs, and enough protein to actually rebuild something.',
+    ingredients:[
+      '1 cup unsweetened almond milk',
+      '1 frozen banana',
+      '2 cups fresh spinach',
+      '1 scoop vanilla protein powder',
+      '1 tbsp almond butter',
+      '½ cup frozen mango',
+      '1 tsp chia seeds',
+      'Ice as needed'
+    ],
+    prep:'Add the almond milk to the blender first, then the spinach — giving the blades liquid to pull from breaks the greens down smooth instead of stringy.',
+    cooking:'Blend on high 45–60 seconds until completely smooth, scraping down once if needed. Too thick, add a splash of almond milk; too thin, a few more ice cubes. Drink within a few minutes of finishing your workout. Serves 1.',
+    links:[{label:'📷 Instagram',url:'#'}]
+  },
+  {
+    emoji:'🧁', cat:'Kids',
+    name:'Hidden-Veggie Mini Muffins',
+    by:'Bianca Rossi',
+    blurb:'The muffins that get vegetables into a five-year-old without a negotiation. Sweet enough to pass, sneaky enough to win.',
+    ingredients:[
+      '1 cup grated carrot',
+      '1 cup grated zucchini, squeezed dry',
+      '1½ cups whole wheat flour',
+      '2 eggs',
+      '⅓ cup maple syrup',
+      '¼ cup melted coconut oil',
+      '1 tsp baking soda',
+      '1 tsp cinnamon',
+      '½ tsp vanilla',
+      'Pinch of salt'
+    ],
+    prep:'Heat oven to 350°F and grease a mini-muffin tin. Squeeze the grated zucchini in a clean towel until most of the water is gone — this is the step that keeps them from going soggy. Whisk the wet ingredients, then fold in the dry until just combined.',
+    cooking:'Spoon into the tin and bake 15–18 minutes, until a toothpick comes out clean. Cool 5 minutes before popping them out. Makes about 24 mini muffins.',
+    links:[{label:'📷 Instagram',url:'#'}]
+  }
+];
+
+var currentCat = 'All';
+var currentSearch = '';
+
+var gridEl  = document.getElementById('grid');
+var emptyEl = document.getElementById('empty');
+var countEl = document.getElementById('count');
+
+function getFiltered() {
+  var q = currentSearch.toLowerCase().trim();
+  return recipes.filter(function(r) {
+    var catOk = currentCat === 'All' || r.cat === currentCat;
+    var hay = (r.name + ' ' + r.by + ' ' + r.blurb + ' ' + r.cat + ' ' + r.ingredients.join(' ')).toLowerCase();
+    return catOk && (!q || hay.indexOf(q) > -1);
+  });
+}
+
+function makeCard(r) {
+  var el = document.createElement('div');
+  el.className = 'card';
+  el.setAttribute('role', 'button');
+  el.setAttribute('tabindex', '0');
+  el.innerHTML =
+    '<div class="card-top">' +
+      '<div class="emoji-tile">' + r.emoji + '</div>' +
+      '<div class="card-head">' +
+        '<div class="card-name">' + r.name + '</div>' +
+        '<div class="card-by">Shared by ' + r.by + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="card-bio">' + r.blurb + '</div>' +
+    '<div class="card-foot">' +
+      '<span class="card-cat">' + r.emoji + ' ' + r.cat + '</span>' +
+      '<span class="card-view">View recipe ›</span>' +
+    '</div>';
+  el.addEventListener('click', function() { openModal(r); });
+  el.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(r); } });
+  return el;
+}
+
+function render() {
+  var list = getFiltered();
+  gridEl.innerHTML = '';
+  countEl.textContent = list.length + (list.length === 1 ? ' recipe' : ' recipes');
+
+  if (list.length === 0) {
+    emptyEl.classList.add('show');
+    gridEl.style.display = 'none';
+    return;
+  }
+  emptyEl.classList.remove('show');
+  gridEl.style.display = 'grid';
+  list.forEach(function(r) { gridEl.appendChild(makeCard(r)); });
+}
+
+function openModal(r) {
+  document.getElementById('m-emoji').textContent = r.emoji;
+  document.getElementById('m-name').textContent  = r.name;
+  document.getElementById('m-by').textContent    = 'Shared by ' + r.by;
+  document.getElementById('m-cat').textContent   = r.cat;
+  document.getElementById('m-blurb').textContent = r.blurb;
+
+  document.getElementById('m-ingredients').innerHTML =
+    r.ingredients.map(function(i) { return '<li>' + i + '</li>'; }).join('');
+  document.getElementById('m-prep').textContent    = r.prep;
+  document.getElementById('m-cooking').textContent = r.cooking;
+
+  var actions = '';
+  (r.links || []).forEach(function(l) {
+    actions += '<a href="' + l.url + '" class="btn" target="_blank" rel="noopener">' + l.label + '</a>';
+  });
+  document.getElementById('m-actions').innerHTML = actions;
+
+  var overlay = document.getElementById('overlay');
+  var sheet = document.getElementById('sheet');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() { sheet.scrollTop = 0; }, 10);
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('pills').querySelectorAll('.pill').forEach(function(pill) {
+  pill.addEventListener('click', function() {
+    document.querySelectorAll('.pill').forEach(function(x) { x.classList.remove('active'); });
+    pill.classList.add('active');
+    currentCat = pill.dataset.cat;
+    render();
+  });
+});
+
+var searchEl = document.getElementById('search');
+var clearBtn = document.getElementById('clear-btn');
+searchEl.addEventListener('input', function() {
+  currentSearch = searchEl.value;
+  clearBtn.classList.toggle('visible', currentSearch.length > 0);
+  render();
+});
+clearBtn.addEventListener('click', function() {
+  searchEl.value = ''; currentSearch = '';
+  clearBtn.classList.remove('visible');
+  searchEl.focus(); render();
+});
+
+document.getElementById('close-btn').addEventListener('click', closeModal);
+document.getElementById('overlay').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('overlay')) closeModal();
+});
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+render();
+</script>
+</body>
+</html>
