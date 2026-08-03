@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sharp Cut Barbershop — Directory Listing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16302B;
+    --green:#1F7A64;
+    --green-dark:#175E4D;
+    --mint:#E4F1EC;
+    --gold:#F4A93C;
+    --gold-ink:#7A4E12;
+    --paper:#EEF2F0;
+    --card:#FFFFFF;
+    --muted:#5E7168;
+    --line:#DDE6E1;
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Inter',system-ui,-apple-system,sans-serif;
+    --shadow:0 8px 30px rgba(22,48,43,.10);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased;
+    padding:26px 16px 60px;
+  }
+
+  .listing{
+    max-width:440px;margin:0 auto;background:var(--card);
+    border-radius:22px;overflow:hidden;box-shadow:var(--shadow);
+    border:1px solid var(--line);
+  }
+
+  /* ---- Media (video spotlight) ---- */
+  .media{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,var(--green),var(--green-dark));display:grid;place-items:center;overflow:hidden}
+  .media iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .media .ph{text-align:center;color:#fff}
+  .media .ph .play{
+    width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.16);
+    border:2px solid rgba(255,255,255,.7);display:grid;place-items:center;margin:0 auto 10px;
+  }
+  .media .ph .play::after{content:"";border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+  .media .ph small{font-family:var(--display);letter-spacing:.03em;font-size:12.5px;opacity:.92;text-transform:uppercase}
+
+  /* ---- Head ---- */
+  .head{padding:18px 20px 4px}
+  .titlerow{display:flex;align-items:flex-start;gap:12px}
+  .logo{
+    width:52px;height:52px;border-radius:14px;flex:none;display:grid;place-items:center;font-size:28px;
+    background:var(--mint);border:1px solid #CDE3D9;margin-top:2px;
+  }
+  h1{font-family:var(--display);font-weight:700;font-size:24px;line-height:1.08;margin:0}
+  .cat{font-family:var(--display);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-top:3px}
+
+  .statusline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0 2px}
+  .status{
+    font-family:var(--display);font-weight:600;font-size:13px;
+    display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;
+  }
+  .status .led{width:8px;height:8px;border-radius:50%}
+  .status.open{background:#E4F3EA;color:#1B7A46}
+  .status.open .led{background:#22A559;box-shadow:0 0 0 3px rgba(34,165,89,.18)}
+  .status.closed{background:#FBE9E7;color:#B23A2B}
+  .status.closed .led{background:#D6503C}
+  .status .sub{font-weight:500;color:inherit;opacity:.85}
+  .hours-toggle{background:none;border:none;color:var(--muted);font-family:var(--body);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:4px}
+
+  .addr{display:flex;gap:8px;align-items:flex-start;color:var(--muted);font-size:14px;margin:8px 0 0;line-height:1.4}
+  .addr svg{flex:none;margin-top:2px}
+
+  /* ---- Week hours (collapsible) ---- */
+  .week{max-height:0;overflow:hidden;transition:max-height .28s ease}
+  .week.open{max-height:340px}
+  .week table{width:100%;border-collapse:collapse;margin:12px 0 2px;font-size:13.5px}
+  .week td{padding:6px 0;border-bottom:1px solid var(--line)}
+  .week td.day{color:var(--muted)}
+  .week td.time{text-align:right;font-variant-numeric:tabular-nums}
+  .week tr.today td{color:var(--ink);font-weight:600}
+
+  /* ---- Actions ---- */
+  .actions{padding:16px 20px 4px}
+  .essentials{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .ebtn{
+    display:flex;flex-direction:column;align-items:center;gap:5px;
+    padding:11px 6px;border:1px solid var(--line);border-radius:13px;
+    background:#fff;color:var(--green-dark);text-decoration:none;
+    font-family:var(--display);font-size:12.5px;font-weight:600;
+    transition:border-color .12s ease,transform .12s ease,background .12s ease;
+  }
+  .ebtn:hover{border-color:var(--green);transform:translateY(-1px);background:#F7FBF9}
+  .ebtn svg{stroke:var(--green)}
+
+  .programmable{display:grid;gap:8px;margin-top:10px}
+  .programmable.two{grid-template-columns:1fr 1fr}
+  .pbtn{
+    display:block;text-align:center;text-decoration:none;
+    font-family:var(--display);font-weight:700;font-size:15.5px;letter-spacing:.01em;
+    padding:15px 12px;border-radius:14px;
+    transition:filter .12s ease,transform .12s ease,background .12s ease;
+  }
+  .pbtn:hover{transform:translateY(-1px)}
+  .pbtn.solid{background:var(--green);color:#fff}
+  .pbtn.solid:hover{filter:brightness(1.06)}
+  .pbtn.outline{background:#fff;color:var(--green-dark);border:1.5px solid var(--green)}
+  .pbtn.outline:hover{background:#F7FBF9}
+
+  /* ---- Coupon ticket (signature) ---- */
+  .coupon{
+    position:relative;margin:18px 20px 0;background:var(--gold);
+    border-radius:14px;padding:15px 18px 15px 20px;color:var(--gold-ink);
+    display:flex;align-items:center;gap:14px;overflow:hidden;
+  }
+  .coupon::before,.coupon::after{
+    content:"";position:absolute;width:18px;height:18px;border-radius:50%;
+    background:var(--card);top:50%;transform:translateY(-50%);
+  }
+  .coupon::before{left:-9px}
+  .coupon::after{right:-9px}
+  .coupon .perf{position:absolute;left:52px;top:8px;bottom:8px;border-left:2px dashed rgba(122,78,18,.4)}
+  .coupon .tag{font-size:26px;width:34px;text-align:center;flex:none}
+  .coupon .deal{padding-left:14px}
+  .coupon .deal .k{font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+  .coupon .deal .v{font-family:var(--display);font-weight:700;font-size:16px;line-height:1.2;margin-top:2px}
+
+  /* ---- Body sections ---- */
+  .sec{padding:18px 20px 0}
+  .sec h3{font-family:var(--display);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 8px}
+  .about{font-size:15px;color:#2C3F39;margin:0}
+
+  .disclose{border-top:1px solid var(--line);margin-top:18px}
+  .disclose summary{
+    list-style:none;cursor:pointer;padding:15px 20px;
+    display:flex;align-items:center;justify-content:space-between;
+    font-family:var(--display);font-weight:600;font-size:15px;color:var(--ink);
+  }
+  .disclose summary::-webkit-details-marker{display:none}
+  .disclose summary .chev{transition:transform .2s ease;color:var(--muted)}
+  .disclose[open] summary .chev{transform:rotate(180deg)}
+  .price-list{padding:0 20px 18px}
+  .price-list .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+  .price-list .row:last-child{border-bottom:none}
+  .price-list .row .p{font-variant-numeric:tabular-nums;color:var(--green-dark);font-weight:600}
+
+  .tags{display:flex;flex-wrap:wrap;gap:7px;padding:16px 20px 4px}
+  .chip{font-size:12.5px;color:var(--green-dark);background:var(--mint);border:1px solid #CDE3D9;border-radius:999px;padding:5px 11px;font-weight:500}
+
+  .foot{padding:14px 20px 22px;border-top:1px solid var(--line);margin-top:8px;display:flex;align-items:center;justify-content:space-between}
+  .ig{display:inline-flex;align-items:center;gap:8px;color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
+  .ig:hover{color:var(--green)}
+  .ig svg{stroke:var(--green)}
+  .powered{font-family:var(--display);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#9DACA5}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<article class="listing" id="listing"></article>
+
+<script>
+/* =========================================================
+   ONE BUSINESS = ONE OBJECT. This is the shape that will
+   drop straight into the corkboard array later.
+   hours: 24h "HH:MM" strings, or null for a closed day.
+   video: a YouTube ID (e.g. "dQw4...") or "" for the
+          branded spotlight placeholder.
+   ========================================================= */
+const biz = {
+  name:"The Sharp Cut Barbershop",
+  emoji:"💈",
+  category:"Barbershop",
+  address:"2585 Green Valley Pkwy, Suite 108, Henderson, NV 89014",
+  lat:36.0234, lng:-115.0921,
+  phone:"7025550137",
+  website:"https://example.com",
+  video:"1FFU47mdPm8",           // ← YouTube ID only (the bit after v= in the URL), not the whole link
+  about:"A neighborhood barbershop doing classic cuts, fades, and beard work — no rush, no gimmicks. Walk-ins are welcome, but appointments move you to the front. Same barbers every visit, so they learn your cut and you skip the explaining.",
+  coupon:"$5 off your first haircut",
+  links:[                          // ← 1 or 2 programmable buttons, point them anywhere
+    { label:"Book appointment", url:"https://example.com/book" },
+    { label:"Gift cards",       url:"https://example.com/gift" },
+  ],
+  instagram:"https://instagram.com",
+  tags:["Walk-ins welcome","Cash & card","Kids' cuts","Beard trims","Open Sundays"],
+  sections:[                       // ← 0, 1, or 2 dropdowns. Swap the title + content freely.
+    { title:"Services & pricing", type:"list", items:[
+        { name:"Haircut", price:"$30" },
+        { name:"Haircut + beard", price:"$42" },
+        { name:"Beard trim & line-up", price:"$18" },
+        { name:"Kids' cut (10 & under)", price:"$22" },
+        { name:"Buzz / clipper cut", price:"$20" },
+    ]},
+    { title:"Good to know", type:"text",
+      body:"Walk-ins welcome, but booking online moves you to the front. Free parking in the plaza lot. Cash, card, and Apple Pay accepted — same chair, same barber every visit if you book by name." },
+  ],
+  hours:{
+    mon:["10:00","19:00"],
+    tue:["10:00","19:00"],
+    wed:["10:00","19:00"],
+    thu:["10:00","20:00"],
+    fri:["09:00","20:00"],
+    sat:["09:00","18:00"],
+    sun:["10:00","16:00"],
+  },
+};
+
+/* ---------- helpers ---------- */
+const DAYS = ["sun","mon","tue","wed","thu","fri","sat"];
+const DAY_LABEL = {sun:"Sunday",mon:"Monday",tue:"Tuesday",wed:"Wednesday",thu:"Thursday",fri:"Friday",sat:"Saturday"};
+
+function to12(hhmm){
+  let [h,m] = hhmm.split(":").map(Number);
+  const ap = h>=12 ? "PM":"AM";
+  h = h%12; if(h===0) h=12;
+  return m===0 ? `${h} ${ap}` : `${h}:${String(m).padStart(2,"0")} ${ap}`;
+}
+function mins(hhmm){ const [h,m]=hhmm.split(":").map(Number); return h*60+m; }
+
+/* current time in Las Vegas regardless of the viewer's timezone */
+function vegasNow(){
+  const parts = new Intl.DateTimeFormat("en-US",{
+    timeZone:"America/Los_Angeles", weekday:"short", hour:"2-digit", minute:"2-digit", hour12:false
+  }).formatToParts(new Date());
+  const get = t => parts.find(p=>p.type===t).value;
+  const wk = {Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}[get("weekday")];
+  let hr = parseInt(get("hour"),10); if(hr===24) hr=0;
+  return { dayIdx:wk, minutes:hr*60 + parseInt(get("minute"),10) };
+}
+
+function computeStatus(hours){
+  const {dayIdx,minutes} = vegasNow();
+  const todayKey = DAYS[dayIdx];
+  const today = hours[todayKey];
+
+  if(today){
+    const [o,c] = today.map(mins);
+    if(minutes < o)  return {open:false, note:`Opens ${to12(today[0])}`};
+    if(minutes < c)  return {open:true,  note:`Closes ${to12(today[1])}`};
+  }
+  // find the next day that has hours
+  for(let i=1;i<=7;i++){
+    const k = DAYS[(dayIdx+i)%7];
+    if(hours[k]){
+      const when = i===1 ? "tomorrow" : DAY_LABEL[k].slice(0,3);
+      return {open:false, note:`Opens ${when} ${to12(hours[k][0])}`};
+    }
+  }
+  return {open:false, note:"Hours vary"};
+}
+
+/* ---------- render ---------- */
+function render(b){
+  const st = computeStatus(b.hours);
+  const {dayIdx} = vegasNow();
+  const todayKey = DAYS[dayIdx];
+
+  const media = b.video
+    ? `<iframe src="https://www.youtube-nocookie.com/embed/${b.video}" title="${b.name} spotlight" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`
+    : `<div class="ph"><div class="play"></div><small>Spotlight video</small></div>`;
+
+  const weekRows = DAYS.map(k=>{
+    const h = b.hours[k];
+    return `<tr class="${k===todayKey?"today":""}">
+      <td class="day">${DAY_LABEL[k]}</td>
+      <td class="time">${h ? `${to12(h[0])} – ${to12(h[1])}` : "Closed"}</td></tr>`;
+  }).join("");
+
+  const sections = (b.sections || []).slice(0,2).map(s=>{
+    const inner = s.type==="list"
+      ? `<div class="price-list">${s.items.map(it=>`<div class="row"><span>${it.name}</span><span class="p">${it.price}</span></div>`).join("")}</div>`
+      : `<div class="price-list"><p class="about" style="margin:0">${s.body}</p></div>`;
+    return `<details class="disclose">
+      <summary>${s.title}
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </summary>${inner}</details>`;
+  }).join("");
+
+  document.getElementById("listing").innerHTML = `
+    <div class="media">${media}</div>
+
+    <div class="head">
+      <div class="titlerow">
+        <div class="logo">${b.emoji}</div>
+        <div>
+          <h1>${b.name}</h1>
+          <div class="cat">${b.category}</div>
+        </div>
+      </div>
+
+      <div class="statusline">
+        <span class="status ${st.open?"open":"closed"}">
+          <span class="led"></span>${st.open?"Open now":"Closed"}
+          <span class="sub">· ${st.note}</span>
+        </span>
+        <button class="hours-toggle" id="hoursToggle">All hours</button>
+      </div>
+
+      <div class="addr">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E7168" stroke-width="2"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        <span>${b.address}</span>
+      </div>
+
+      <div class="week" id="week">
+        <table><tbody>${weekRows}</tbody></table>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div class="essentials">
+        <a class="ebtn" href="https://www.google.com/maps/dir/?api=1&destination=${b.lat},${b.lng}" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>Directions</a>
+        <a class="ebtn" href="tel:${b.phone}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7a2 2 0 0 1 1.7 2z"/></svg>Call</a>
+        <a class="ebtn" href="${b.website}" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/></svg>Website</a>
+      </div>
+      <div class="programmable ${b.links.length>1?'two':''}">
+        ${b.links.map((l,i)=>`<a class="pbtn ${i===0?'solid':'outline'}" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join("")}
+      </div>
+    </div>
+
+    <div class="coupon">
+      <span class="perf"></span>
+      <span class="tag">🎟️</span>
+      <div class="deal"><div class="k">Directory deal</div><div class="v">${b.coupon}</div></div>
+    </div>
+
+    <div class="sec">
+      <h3>About</h3>
+      <p class="about">${b.about}</p>
+    </div>
+
+    ${sections}
+
+    <div class="tags">${b.tags.map(t=>`<span class="chip">${t}</span>`).join("")}</div>
+
+    <div class="foot">
+      <a class="ig" href="${b.instagram}" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+      <span class="powered">Six Five Apps</span>
+    </div>
+  `;
+
+  const week = document.getElementById("week");
+  document.getElementById("hoursToggle").onclick = (e)=>{
+    week.classList.toggle("open");
+    e.target.textContent = week.classList.contains("open") ? "Hide hours" : "All hours";
+  };
+}
+
+render(biz);
+</script>
+</body>
+</html>
